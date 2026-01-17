@@ -130,26 +130,27 @@
             text-decoration: none;
         }
 
+        /* Grid - Dense for Vertical Content */
         .grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            padding: 0 20px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            padding: 0 15px;
         }
 
         @media (min-width: 600px) {
-            .grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        @media (min-width: 900px) {
             .grid {
                 grid-template-columns: repeat(4, 1fr);
             }
         }
 
-        /* Card */
+        @media (min-width: 900px) {
+            .grid {
+                grid-template-columns: repeat(6, 1fr);
+            }
+        }
+
+        /* Card - Vertical Aspect Ratio */
         .card {
             cursor: pointer;
             position: relative;
@@ -157,95 +158,108 @@
 
         .poster {
             width: 100%;
-            aspect-ratio: 2/3;
-            border-radius: 12px;
+            aspect-ratio: 3/4;
+            border-radius: 8px;
             overflow: hidden;
             background: #1a1a24;
             position: relative;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
 
         .poster img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: opacity 0.3s;
+            transition: transform 0.3s;
+        }
+
+        .card:active .poster img {
+            transform: scale(0.95);
         }
 
         /* CSS Fallback Gradient */
         .poster.no-img {
-            background: linear-gradient(135deg, #4c1d95 0%, #1e1b4b 100%);
+            background: linear-gradient(180deg, #2e1065 0%, #0f172a 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 10px;
+            padding: 5px;
         }
 
         .poster.no-img::after {
             content: attr(data-title);
-            font-size: 14px;
+            font-size: 11px;
             font-weight: bold;
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.3;
         }
 
         .badge {
             position: absolute;
-            top: 8px;
-            right: 8px;
-            background: #e11d48;
+            top: 0;
+            right: 0;
+            background: linear-gradient(45deg, #f43f5e, #e11d48);
             color: white;
-            font-size: 10px;
-            padding: 3px 8px;
-            border-radius: 6px;
+            font-size: 9px;
+            padding: 2px 6px;
+            border-bottom-left-radius: 8px;
             font-weight: 700;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            z-index: 2;
         }
 
         .source-tag {
             position: absolute;
-            bottom: 8px;
-            left: 8px;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(4px);
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 10px;
-            color: rgba(255, 255, 255, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(0deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0) 100%);
+            padding: 15px 5px 5px;
+            font-size: 9px;
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .info {
-            margin-top: 10px;
+            margin-top: 6px;
+            padding: 0 2px;
         }
 
         .info h3 {
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 600;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
+            color: #e2e8f0;
         }
 
         .meta {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            color: #94a3b8;
+            font-size: 10px;
+            color: #64748b;
+            display: none;
         }
 
-        /* Bottom Nav */
+        /* Hide meta for cleaner look */
+
+        /* Bottom Nav - Glassmorphism */
         .btm-nav {
             position: fixed;
             bottom: 0;
             width: 100%;
-            background: #161622;
-            padding: 12px;
+            background: rgba(10, 10, 15, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 10px;
             display: flex;
             justify-content: space-around;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
             z-index: 90;
-            padding-bottom: max(12px, env(safe-area-inset-bottom));
+            padding-bottom: max(10px, env(safe-area-inset-bottom));
         }
 
         .nav-item {
@@ -257,20 +271,26 @@
             text-decoration: none;
             font-size: 10px;
             font-weight: 500;
+            transition: color 0.2s;
         }
 
         .nav-item svg {
-            width: 24px;
-            height: 24px;
+            width: 22px;
+            height: 22px;
             stroke: currentColor;
             stroke-width: 2px;
         }
 
         .nav-item.active {
-            color: var(--p);
+            color: #8b5cf6;
         }
 
-        /* Player Overlay */
+        .nav-item.active svg {
+            stroke: #8b5cf6;
+            filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.5));
+        }
+
+        /* Player Overlay - Vertical Optimized */
         #player {
             position: fixed;
             inset: 0;
@@ -285,29 +305,35 @@
         }
 
         .p-head {
-            padding: 15px;
+            padding: 10px 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(20, 20, 30, 0.9);
-            z-index: 10;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            z-index: 20;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
         }
 
         .p-title {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
-            flex: 1;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            margin-right: 15px;
+            color: white;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
         }
 
         .p-close {
-            background: none;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
             border: none;
             color: white;
-            padding: 5px;
             cursor: pointer;
         }
 
@@ -316,20 +342,28 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: black;
+            background: #000;
             position: relative;
         }
 
         video {
             width: 100%;
-            max-height: 100%;
+            height: 100%;
+            object-fit: contain;
         }
+
+        /* Contain for vertical video */
 
         .p-controls {
             padding: 20px;
-            background: #161622;
+            background: #101014;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            margin-top: -20px;
+            z-index: 15;
+            position: relative;
+            max-height: 50vh;
             overflow-y: auto;
-            max-height: 40vh;
         }
 
         .ep-grid {
