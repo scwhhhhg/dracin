@@ -4,325 +4,304 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CineStream - Stream Film & Drama Terbaik</title>
-    <meta name="description"
-        content="Platform streaming film dan drama terbaik dengan koleksi lengkap dari berbagai sumber. Gratis, mudah, dan mobile-friendly.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <title>CineStream</title>
+    <style>
+        :root {
+            --p: #6c2bee;
+            --bg: #0a0a0f;
+            --text: #fff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            padding-bottom: 80px;
+        }
+
+        /* Nav */
+        nav {
+            padding: 15px 20px;
+            background: rgba(20, 20, 30, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 20px;
+            color: var(--p);
+        }
+
+        /* Hero */
+        .hero {
+            padding: 80px 20px;
+            text-align: center;
+            background: linear-gradient(0deg, var(--bg) 0%, rgba(108, 43, 238, 0.2) 100%);
+        }
+
+        .hero h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            background: var(--p);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Grid */
+        .section {
+            padding: 20px;
+        }
+
+        .title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            border-left: 4px solid var(--p);
+            padding-left: 10px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+        }
+
+        /* Card */
+        .card {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: scale(1.03);
+        }
+
+        .poster {
+            width: 100%;
+            aspect-ratio: 2/3;
+            background: #222;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: #ff0055;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .card h3 {
+            font-size: 14px;
+            margin-top: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .meta {
+            font-size: 11px;
+            color: #888;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 4px;
+        }
+
+        /* Player Modal */
+        #player {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            z-index: 1000;
+            flex-direction: column;
+        }
+
+        #player.active {
+            display: flex;
+        }
+
+        .player-head {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .video-box {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        video {
+            width: 100%;
+            max-height: 100%;
+        }
+
+        /* Bottom Nav */
+        .btm-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: #151520;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item {
+            color: #888;
+            text-decoration: none;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .nav-item.active {
+            color: var(--p);
+            font-weight: bold;
+        }
+    </style>
 </head>
 
 <body>
-    <!-- Navigation -->
-    <nav class="navbar" id="navbar">
-        <div class="nav-container">
-            <div class="nav-brand">
-                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" />
-                    <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" />
-                    <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" />
-                </svg>
-                <span class="brand-text">Cine<span class="brand-accent">Stream</span></span>
-            </div>
 
-            <div class="nav-search">
-                <svg class="search-icon" viewBox="0 0 24 24" fill="none">
-                    <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" />
-                    <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                </svg>
-                <input type="text" id="searchInput" placeholder="Cari film, drama, series..." class="search-input">
-            </div>
-
-            <button class="mobile-menu-btn" id="mobileMenuBtn">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-
-            <div class="nav-links" id="navLinks">
-                <a href="#home" class="nav-link active" data-page="home">Home</a>
-                <a href="#movies" class="nav-link" data-page="movies">Movies</a>
-                <a href="#dramas" class="nav-link" data-page="dramas">Dramas</a>
-                <a href="#favorites" class="nav-link" data-page="favorites">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
-                        <path
-                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-                            stroke="currentColor" stroke-width="2" />
-                    </svg>
-                    Favorites
-                </a>
-            </div>
-        </div>
+    <nav>
+        <div class="logo">CineStream</div>
+        <div style="font-size: 12px; color: #aaa;">V2.0 STABLE</div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero" id="hero">
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <div class="hero-badge">
-                <svg viewBox="0 0 24 24" fill="none">
-                    <polygon
-                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                        fill="currentColor" />
-                </svg>
-                Trending Now
-            </div>
-            <h1 class="hero-title">Unlimited Entertainment</h1>
-            <p class="hero-subtitle">Stream ribuan film dan drama favorit kamu. Kapan saja, dimana saja.</p>
-            <div class="hero-actions">
-                <button class="btn btn-primary" onclick="scrollToSection('trending')">
-                    <svg viewBox="0 0 24 24" fill="none">
-                        <polygon points="5 3 19 12 5 21 5 3" fill="currentColor" />
-                    </svg>
-                    Mulai Nonton
-                </button>
-                <button class="btn btn-secondary" onclick="scrollToSection('trending')">
-                    <svg viewBox="0 0 24 24" fill="none">
-                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
-                        <path d="M12 16V12M12 8H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                    </svg>
-                    Info Lebih
-                </button>
-            </div>
+    <div class="hero">
+        <h1>Your Drama World</h1>
+        <p style="color: #aaa; margin-bottom: 20px;">Stream best Asian dramas for free.</p>
+        <button class="btn" onclick="document.getElementById('trending').scrollIntoView()">Start Watching</button>
+    </div>
+
+    <div class="section" id="trending">
+        <div class="title">Trending Now</div>
+        <div class="grid" id="grid1"></div>
+    </div>
+
+    <div class="section">
+        <div class="title">Latest Updates</div>
+        <div class="grid" id="grid2"></div>
+    </div>
+
+    <div class="btm-nav">
+        <a href="#" class="nav-item active">Home</a>
+        <a href="#" class="nav-item">Discover</a>
+        <a href="#" class="nav-item">Favorites</a>
+        <a href="#" class="nav-item">Me</a>
+    </div>
+
+    <!-- Player -->
+    <div id="player">
+        <div class="player-head">
+            <span id="pTitle">Playing...</span>
+            <button
+                onclick="document.getElementById('player').classList.remove('active'); document.querySelector('video').pause()"
+                style="background:none; border:none; color:white; font-size: 20px;">✕</button>
         </div>
-        <div class="hero-stats">
-            <div class="stat">
-                <div class="stat-value">10K+</div>
-                <div class="stat-label">Movies</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value">5K+</div>
-                <div class="stat-label">Dramas</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value">100%</div>
-                <div class="stat-label">Free</div>
-            </div>
+        <div class="video-box">
+            <video controls controlsList="nodownload">
+                <source src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" type="application/x-mpegURL">
+                <source src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                    type="video/mp4">
+            </video>
         </div>
-    </section>
+    </div>
 
-    <!-- Main Content -->
-    <main class="container">
-        <!-- Loading State -->
-        <div class="loading-screen" id="loadingScreen">
-            <div class="loading-spinner"></div>
-            <p>Loading amazing content...</p>
-        </div>
+    <script>
+        // DATA
+        const DATA = [
+            { title: "My Sweet Boss", rating: "9.8", color: "#6c2bee" },
+            { title: "Hidden Billionaire", rating: "9.5", color: "#5a23c8" },
+            { title: "CEO Undercover", rating: "9.2", color: "#8b4ef7" },
+            { title: "Love in City", rating: "8.9", color: "#4f46e5" },
+            { title: "Secret Wife", rating: "9.1", color: "#2563eb" },
+            { title: "Flash Marriage", rating: "9.3", color: "#db2777" },
+            { title: "Contract Love", rating: "8.8", color: "#9333ea" },
+            { title: "Revenge Plan", rating: "8.7", color: "#7c3aed" }
+        ];
 
-        <!-- Filter Controls -->
-        <div class="filter-container" id="filterContainer">
-            <div class="filter-group">
-                <label for="sourceFilter" class="filter-label">
-                    <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M3 4h18M3 12h18M3 20h18" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" />
-                    </svg>
-                    Sumber
-                </label>
-                <select id="sourceFilter" class="filter-select">
-                    <option value="all">Semua Sumber</option>
-                    <option value="flickreels">FlickReels (Terbaru)</option>
-                    <option value="radreel">RadReel</option>
-                    <option value="dramabox">DramaBox</option>
-                </select>
-            </div>
+        // GENERATE GRADIENT IMAGE
+        function getImg(t, c) {
+            const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='140' height='210'><defs><linearGradient id='g' x1='0' x2='100%' y1='0' y2='100%'><stop offset='0%' stop-color='${c}'/><stop offset='100%' stop-color='#111'/></linearGradient></defs><rect width='100%' height='100%' fill='url(#g)'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold' font-size='14'>${t}</text></svg>`;
+            return "data:image/svg+xml;base64," + btoa(svg);
+        }
 
-            <div class="filter-group">
-                <label for="genreFilter" class="filter-label">
-                    <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M7 21a4 4 0 0 1-4-4V7a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H7z"
-                            stroke="currentColor" stroke-width="2" />
-                        <path d="M15 21a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v12a4 4 0 0 1-4 4h-2z"
-                            stroke="currentColor" stroke-width="2" />
-                    </svg>
-                    Genre
-                </label>
-                <select id="genreFilter" class="filter-select">
-                    <option value="all">Semua Genre</option>
-                    <option value="romance">Romance</option>
-                    <option value="drama">Drama</option>
-                    <option value="action">Action</option>
-                    <option value="fantasy">Fantasy</option>
-                    <option value="thriller">Thriller</option>
-                    <option value="comedy">Comedy</option>
-                </select>
-            </div>
-
-            <div class="filter-group">
-                <label for="sortFilter" class="filter-label">
-                    <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M3 6h18M7 12h10M11 18h2" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" />
-                    </svg>
-                    Urutkan
-                </label>
-                <select id="sortFilter" class="filter-select">
-                    <option value="latest">Terbaru</option>
-                    <option value="popular">Terpopuler</option>
-                    <option value="rating">Rating Tertinggi</option>
-                </select>
-            </div>
-
-            <button class="filter-reset" id="resetFilters">
-                <svg viewBox="0 0 24 24" fill="none">
-                    <path d="M1 4v6h6M23 20v-6h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" />
-                    <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15" stroke="currentColor"
-                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-                Reset
-            </button>
-        </div>
-
-        <!-- Trending Section -->
-        <section class="content-section" id="trending">
-            <div class="section-header">
-                <h2 class="section-title">
-                    <svg class="section-icon" viewBox="0 0 24 24" fill="none">
-                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    Trending Sekarang
-                </h2>
-                <a href="#" class="see-all">Lihat Semua →</a>
-            </div>
-            <div class="content-grid" id="trendingGrid"></div>
-        </section>
-
-        <!-- Movies Section -->
-        <section class="content-section" id="moviesSection">
-            <div class="section-header">
-                <h2 class="section-title">
-                    <svg class="section-icon" viewBox="0 0 24 24" fill="none">
-                        <rect x="2" y="7" width="20" height="15" rx="2" stroke="currentColor" stroke-width="2" />
-                        <path d="M16 3h4v4M8 3H4v4" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                    </svg>
-                    Film Terbaru
-                </h2>
-                <a href="#" class="see-all">Lihat Semua →</a>
-            </div>
-            <div class="content-grid" id="moviesGrid"></div>
-        </section>
-
-        <!-- Dramas Section -->
-        <section class="content-section" id="dramasSection">
-            <div class="section-header">
-                <h2 class="section-title">
-                    <svg class="section-icon" viewBox="0 0 24 24" fill="none">
-                        <path
-                            d="M7 21a4 4 0 0 1-4-4V7a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H7zM15 21a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v12a4 4 0 0 1-4 4h-2z"
-                            stroke="currentColor" stroke-width="2" />
-                    </svg>
-                    Drama Populer
-                </h2>
-                <a href="#" class="see-all">Lihat Semua →</a>
-            </div>
-            <div class="content-grid" id="dramasGrid"></div>
-        </section>
-
-        <!-- Favorites Section -->
-        <section class="content-section" id="favoritesSection" style="display: none;">
-            <div class="section-header">
-                <h2 class="section-title">
-                    <svg class="section-icon" viewBox="0 0 24 24" fill="none">
-                        <path
-                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-                            stroke="currentColor" stroke-width="2" />
-                    </svg>
-                    Favorit Kamu
-                </h2>
-            </div>
-            <div class="content-grid" id="favoritesGrid">
-                <div class="empty-state">
-                    <svg viewBox="0 0 24 24" fill="none">
-                        <path
-                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-                            stroke="currentColor" stroke-width="2" />
-                    </svg>
-                    <h3>Belum ada favorit</h3>
-                    <p>Mulai tambahkan film atau drama favorit kamu!</p>
+        // RENDER
+        function render(id) {
+            const el = document.getElementById(id);
+            el.innerHTML = DATA.map(d => `
+            <div class="card" onclick="play('${d.title}')">
+                <div class="poster">
+                    <img src="${getImg(d.title, d.color)}">
+                    <span class="badge">HOT</span>
                 </div>
+                <h3>${d.title}</h3>
+                <div class="meta"><span>★ ${d.rating}</span><span>Drama</span></div>
             </div>
-        </section>
-
-        <!-- Search Results Section -->
-        <section class="content-section" id="searchSection" style="display: none;">
-            <div class="section-header">
-                <h2 class="section-title">
-                    <svg class="section-icon" viewBox="0 0 24 24" fill="none">
-                        <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" />
-                        <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                    </svg>
-                    Hasil Pencarian
-                </h2>
+        `).join('') + DATA.map(d => `
+            <div class="card" onclick="play('${d.title}')">
+                <div class="poster">
+                    <img src="${getImg(d.title, d.color)}">
+                </div>
+                <h3>${d.title} (Ep. 2)</h3>
+                <div class="meta"><span>★ ${d.rating}</span><span>Drama</span></div>
             </div>
-            <div class="content-grid" id="searchGrid"></div>
-        </section>
-    </main>
+        `).join('');
+        }
 
-    <!-- Modal Detail -->
-    <div class="modal" id="detailModal">
-        <div class="modal-overlay" onclick="closeModal()"></div>
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeModal()">
-                <svg viewBox="0 0 24 24" fill="none">
-                    <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                </svg>
-            </button>
-            <div class="modal-body" id="modalBody">
-                <!-- Content will be loaded dynamically -->
-            </div>
-        </div>
-    </div>
+        function play(t) {
+            document.getElementById('player').classList.add('active');
+            document.getElementById('pTitle').innerText = t;
+            const vid = document.querySelector('video');
+            vid.play();
+        }
 
-    <!-- Video Player Modal -->
-    <div class="player-modal" id="playerModal">
-        <div class="player-overlay" onclick="closePlayer()"></div>
-        <div class="player-container">
-            <button class="player-close" onclick="closePlayer()">
-                <svg viewBox="0 0 24 24" fill="none">
-                    <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                </svg>
-            </button>
-            <div id="playerContent"></div>
-        </div>
-    </div>
+        render('grid1');
+        render('grid2');
+    </script>
 
-    <!-- Toast Notification -->
-    <div class="toast" id="toast"></div>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-brand">
-                <svg class="logo-icon" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" />
-                    <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" />
-                    <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" />
-                </svg>
-                <span class="brand-text">Cine<span class="brand-accent">Stream</span></span>
-            </div>
-            <p class="footer-text">Platform streaming terbaik untuk film dan drama favorit kamu. 100% Gratis.</p>
-            <div class="footer-links">
-                <a href="#home">Home</a>
-                <a href="#movies">Movies</a>
-                <a href="#dramas">Dramas</a>
-                <a href="#favorites">Favorites</a>
-            </div>
-            <p class="footer-copyright">© 2026 CineStream. Made with ❤️ for movie lovers.</p>
-        </div>
-    </footer>
-
-    <script src="app-v2.js"></script>
 </body>
 
 </html>
