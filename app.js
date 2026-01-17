@@ -164,7 +164,6 @@ const utils = {
         }
     },
 
-    // Scroll to section
     scrollToSection(id) {
         const element = document.getElementById(id);
         if (element) {
@@ -177,6 +176,22 @@ const utils = {
                 behavior: 'smooth'
             });
         }
+    },
+
+    // Create gradient image for fallback
+    createGradientImage(title, color = '#6c2bee') {
+        const svg = `
+        <svg width="140" height="210" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:${color};stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#1a1a2e;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <rect width="140" height="210" fill="url(#grad)"/>
+            <text x="50%" y="50%" text-anchor="middle" fill="white" font-size="14" font-weight="bold" font-family="Arial">${title.substring(0, 15)}</text>
+        </svg>`;
+        return 'data:image/svg+xml;base64,' + btoa(svg);
     }
 };
 
@@ -833,10 +848,10 @@ const render = {
         return `
             <div class="content-card" data-id="${id}" data-source="${item.source}" data-drama-id="${dramaId}">
                 <div class="card-image-wrapper">
-                    <img src="${item.image || 'https://via.placeholder.com/300x450?text=No+Image'}\" 
+                    <img src="${item.image || utils.createGradientImage(item.title)}" 
                          alt="${item.title}" 
                          class="card-image"
-                         onerror="this.src='https://via.placeholder.com/300x450?text=No+Image'"
+                         onerror="this.src=utils.createGradientImage('${item.title ? item.title.replace(/'/g, "\\'") : "Drama"}')"
                          loading="lazy">
                     <div class="card-overlay">
                         <div class="card-actions">
@@ -1155,6 +1170,14 @@ async function playDrama(id, source) {
                     <div class="video-loading" id="videoLoading">
                         <div class="loading-spinner"></div>
                         <p>Loading video...</p>
+                    </div>
+                    <div style="position: absolute; bottom: 80px; right: 20px; z-index: 20; display: flex; gap: 10px;">
+                        <select onchange="utils.showToast(this.value)" style="background: rgba(0,0,0,0.7); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 5px 10px; border-radius: 4px; cursor: pointer;">
+                            <option value="1080p">1080p</option>
+                            <option value="720p">720p</option>
+                            <option value="480p">480p</option>
+                        </select>
+                        <button onclick="utils.showToast('Subtitles coming soon')" style="background: rgba(0,0,0,0.7); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 5px 10px; border-radius: 4px; cursor: pointer;">CC</button>
                     </div>
                 </div>
                 <div class="episodes-sidebar">
