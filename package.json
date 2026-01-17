@@ -1,0 +1,14 @@
+{
+  "name": "cinestream",
+  "version": "1.0.0",
+  "description": "Premium streaming platform with 8 video sources",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx serve .",
+    "build": "echo 'Static site - no build needed'",
+    "deploy": "vercel --prod"
+  },
+  "keywords": ["streaming", "drama", "anime", "movies"],
+  "author": "CineStream",
+  "license": "MIT"
+}
