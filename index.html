@@ -3,105 +3,164 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>CineStream</title>
     <style>
         :root {
             --p: #6c2bee;
             --bg: #0a0a0f;
             --text: #fff;
+            --glass: rgba(20, 20, 30, 0.95);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             background: var(--bg);
             color: var(--text);
             padding-bottom: 80px;
+            overflow-x: hidden;
+        }
+
+        /* Skeleton */
+        .skeleton {
+            background: linear-gradient(90deg, #1f1f2e 25%, #2a2a3d 50%, #1f1f2e 75%);
+            background-size: 200% 100%;
+            animation: simmer 2s infinite;
+            border-radius: 8px;
+        }
+
+        @keyframes simmer {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
         }
 
         /* Nav */
         nav {
             padding: 15px 20px;
-            background: rgba(20, 20, 30, 0.8);
-            backdrop-filter: blur(10px);
+            background: var(--glass);
             position: sticky;
             top: 0;
-            z-index: 100;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 90;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .logo {
             font-weight: 800;
-            font-size: 20px;
+            font-size: 22px;
             color: var(--p);
+            letter-spacing: -0.5px;
         }
 
         /* Hero */
         .hero {
-            padding: 80px 20px;
-            text-align: center;
-            background: linear-gradient(0deg, var(--bg) 0%, rgba(108, 43, 238, 0.2) 100%);
+            padding: 40px 20px;
+            text-align: left;
+            background: linear-gradient(180deg, rgba(108, 43, 238, 0.15) 0%, var(--bg) 100%);
         }
 
         .hero h1 {
-            font-size: 32px;
+            font-size: 28px;
+            font-weight: 800;
+            line-height: 1.2;
             margin-bottom: 10px;
         }
 
-        .btn {
+        .chips {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 10px 0;
+            scrollbar-width: none;
+        }
+
+        .chip {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            white-space: nowrap;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .chip.active {
             background: var(--p);
             color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-weight: bold;
-            cursor: pointer;
+            border-color: var(--p);
         }
 
         /* Grid */
         .section {
-            padding: 20px;
+            padding: 20px 0;
+        }
+
+        .head {
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
         }
 
         .title {
             font-size: 18px;
-            margin-bottom: 15px;
-            font-weight: bold;
-            border-left: 4px solid var(--p);
-            padding-left: 10px;
+            font-weight: 700;
+        }
+
+        .more {
+            font-size: 13px;
+            color: var(--p);
+            text-decoration: none;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            grid-template-columns: repeat(2, 1fr);
             gap: 15px;
+            padding: 0 20px;
+        }
+
+        @media (min-width: 600px) {
+            .grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 900px) {
+            .grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
         }
 
         /* Card */
         .card {
             cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .card:hover {
-            transform: scale(1.03);
+            position: relative;
         }
 
         .poster {
             width: 100%;
             aspect-ratio: 2/3;
-            background: #222;
-            border-radius: 8px;
+            border-radius: 12px;
             overflow: hidden;
+            background: #1a1a24;
             position: relative;
         }
 
@@ -109,46 +168,115 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: opacity 0.3s;
+        }
+
+        /* CSS Fallback Gradient */
+        .poster.no-img {
+            background: linear-gradient(135deg, #4c1d95 0%, #1e1b4b 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .poster.no-img::after {
+            content: attr(data-title);
+            font-size: 14px;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.8);
         }
 
         .badge {
             position: absolute;
-            top: 5px;
-            right: 5px;
-            background: #ff0055;
+            top: 8px;
+            right: 8px;
+            background: #e11d48;
             color: white;
             font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
-        .card h3 {
+        .source-tag {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .info {
+            margin-top: 10px;
+        }
+
+        .info h3 {
             font-size: 14px;
-            margin-top: 8px;
-            white-space: nowrap;
+            font-weight: 600;
             overflow: hidden;
             text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-bottom: 4px;
         }
 
         .meta {
-            font-size: 11px;
-            color: #888;
             display: flex;
             justify-content: space-between;
-            margin-top: 4px;
+            font-size: 12px;
+            color: #94a3b8;
         }
 
-        /* Player Modal */
-        #player {
-            display: none;
+        /* Bottom Nav */
+        .btm-nav {
             position: fixed;
-            top: 0;
-            left: 0;
+            bottom: 0;
             width: 100%;
-            height: 100%;
+            background: #161622;
+            padding: 12px;
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: 90;
+            padding-bottom: max(12px, env(safe-area-inset-bottom));
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: #64748b;
+            text-decoration: none;
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        .nav-item svg {
+            width: 24px;
+            height: 24px;
+            stroke: currentColor;
+            stroke-width: 2px;
+        }
+
+        .nav-item.active {
+            color: var(--p);
+        }
+
+        /* Player Overlay */
+        #player {
+            position: fixed;
+            inset: 0;
             background: black;
             z-index: 1000;
+            display: none;
             flex-direction: column;
         }
 
@@ -156,18 +284,39 @@
             display: flex;
         }
 
-        .player-head {
+        .p-head {
             padding: 15px;
             display: flex;
             justify-content: space-between;
-            background: rgba(255, 255, 255, 0.1);
+            align-items: center;
+            background: rgba(20, 20, 30, 0.9);
+            z-index: 10;
         }
 
-        .video-box {
+        .p-title {
+            font-size: 16px;
+            font-weight: 600;
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-right: 15px;
+        }
+
+        .p-close {
+            background: none;
+            border: none;
+            color: white;
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        .video-wrapper {
             flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
+            background: black;
             position: relative;
         }
 
@@ -176,28 +325,67 @@
             max-height: 100%;
         }
 
-        /* Bottom Nav */
-        .btm-nav {
-            position: fixed;
-            bottom: 0;
+        .p-controls {
+            padding: 20px;
+            background: #161622;
+            overflow-y: auto;
+            max-height: 40vh;
+        }
+
+        .ep-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .ep-btn {
+            background: #2a2a3d;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 12px 0;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .ep-btn.active {
+            background: var(--p);
+            border-color: var(--p);
+        }
+
+        .quality-sel {
             width: 100%;
-            background: #151520;
-            display: flex;
-            justify-content: space-around;
-            padding: 15px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            background: #2a2a3d;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
         }
 
-        .nav-item {
-            color: #888;
-            text-decoration: none;
-            font-size: 12px;
-            text-align: center;
+        /* Toast */
+        #toast {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #333;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 13px;
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 2000;
+            white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
         }
 
-        .nav-item.active {
-            color: var(--p);
-            font-weight: bold;
+        #toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
         }
     </style>
 </head>
@@ -206,100 +394,244 @@
 
     <nav>
         <div class="logo">CineStream</div>
-        <div style="font-size: 12px; color: #aaa;">V2.0 STABLE</div>
+        <div
+            style="font-size: 12px; font-weight: 600; background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 6px;">
+            V3.1</div>
     </nav>
 
     <div class="hero">
-        <h1>Your Drama World</h1>
-        <p style="color: #aaa; margin-bottom: 20px;">Stream best Asian dramas for free.</p>
-        <button class="btn" onclick="document.getElementById('trending').scrollIntoView()">Start Watching</button>
-    </div>
-
-    <div class="section" id="trending">
-        <div class="title">Trending Now</div>
-        <div class="grid" id="grid1"></div>
+        <h1>Discover<br><span style="color:var(--p)">Asian Dramas</span></h1>
+        <div class="chips" id="sourceChips">
+            <div class="chip active" onclick="filterSource('all')">All</div>
+            <div class="chip" onclick="filterSource('flickreels')">FlickReels</div>
+            <div class="chip" onclick="filterSource('radreel')">RadReel</div>
+            <div class="chip" onclick="filterSource('dramabox')">DramaBox</div>
+            <div class="chip" onclick="filterSource('meloshort')">MeloStep</div>
+        </div>
     </div>
 
     <div class="section">
-        <div class="title">Latest Updates</div>
-        <div class="grid" id="grid2"></div>
+        <div class="head">
+            <div class="title">Trending Now</div>
+        </div>
+        <div class="grid" id="mainGrid">
+            <!-- Content will be injected here -->
+            <div class="skeleton" style="aspect-ratio: 2/3"></div>
+            <div class="skeleton" style="aspect-ratio: 2/3"></div>
+            <div class="skeleton" style="aspect-ratio: 2/3"></div>
+            <div class="skeleton" style="aspect-ratio: 2/3"></div>
+        </div>
     </div>
 
     <div class="btm-nav">
-        <a href="#" class="nav-item active">Home</a>
-        <a href="#" class="nav-item">Discover</a>
-        <a href="#" class="nav-item">Favorites</a>
-        <a href="#" class="nav-item">Me</a>
+        <a href="#" class="nav-item active">
+            <svg viewBox="0 0 24 24" fill="none">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            Home
+        </a>
+        <a href="#" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"></polygon>
+            </svg>
+            Shorts
+        </a>
+        <a href="#" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none">
+                <path
+                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                </path>
+            </svg>
+            Liked
+        </a>
     </div>
 
-    <!-- Player -->
+    <!-- Player Modal -->
     <div id="player">
-        <div class="player-head">
-            <span id="pTitle">Playing...</span>
-            <button
-                onclick="document.getElementById('player').classList.remove('active'); document.querySelector('video').pause()"
-                style="background:none; border:none; color:white; font-size: 20px;">✕</button>
+        <div class="p-head">
+            <div class="p-title" id="pTitle">Loading...</div>
+            <button class="p-close" onclick="closePlayer()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
         </div>
-        <div class="video-box">
-            <video controls controlsList="nodownload">
-                <source src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" type="application/x-mpegURL">
-                <source src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-                    type="video/mp4">
+        <div class="video-wrapper">
+            <video id="vid" controls playsinline>
+                <source src="" type="application/x-mpegURL">
             </video>
         </div>
+        <div class="p-controls">
+            <select class="quality-sel" onchange="toast('Quality: ' + this.value)">
+                <option>1080p Full HD</option>
+                <option>720p HD</option>
+                <option>480p SD</option>
+            </select>
+            <div style="font-weight:600; margin-bottom:10px;">Episodes</div>
+            <div class="ep-grid" id="epList"></div>
+        </div>
     </div>
 
+    <div id="toast">Message</div>
+
     <script>
-        // DATA
-        const DATA = [
-            { title: "My Sweet Boss", rating: "9.8", color: "#6c2bee" },
-            { title: "Hidden Billionaire", rating: "9.5", color: "#5a23c8" },
-            { title: "CEO Undercover", rating: "9.2", color: "#8b4ef7" },
-            { title: "Love in City", rating: "8.9", color: "#4f46e5" },
-            { title: "Secret Wife", rating: "9.1", color: "#2563eb" },
-            { title: "Flash Marriage", rating: "9.3", color: "#db2777" },
-            { title: "Contract Love", rating: "8.8", color: "#9333ea" },
-            { title: "Revenge Plan", rating: "8.7", color: "#7c3aed" }
+        const API = "https://dramabos.asia";
+
+        // State
+        let allDramas = [];
+
+        // Fallback Data if API fails completely
+        const BACKUP_DATA = [
+            { id: '1', title: 'Bossy Husband', source: 'flickreels', rating: 9.5 },
+            { id: '2', title: 'Hidden Love', source: 'radreel', rating: 9.2 },
+            { id: '3', title: 'Rich Family', source: 'dramabox', rating: 9.0 },
+            { id: '4', title: 'Secret Life', source: 'meloshort', rating: 8.8 }
         ];
 
-        // GENERATE GRADIENT IMAGE
-        function getImg(t, c) {
-            const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='140' height='210'><defs><linearGradient id='g' x1='0' x2='100%' y1='0' y2='100%'><stop offset='0%' stop-color='${c}'/><stop offset='100%' stop-color='#111'/></linearGradient></defs><rect width='100%' height='100%' fill='url(#g)'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold' font-size='14'>${t}</text></svg>`;
-            return "data:image/svg+xml;base64," + btoa(svg);
+        function toast(msg) {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
         }
 
-        // RENDER
-        function render(id) {
-            const el = document.getElementById(id);
-            el.innerHTML = DATA.map(d => `
-            <div class="card" onclick="play('${d.title}')">
-                <div class="poster">
-                    <img src="${getImg(d.title, d.color)}">
+        // Load Data
+        async function init() {
+            const grid = document.getElementById('mainGrid');
+
+            try {
+                // Fetch from multiple sources in parallel
+                const [flick, rad, box] = await Promise.allSettled([
+                    fetch(`${API}/flickreels/home?page=1`).then(r => r.json()),
+                    fetch(`${API}/radreel/api/v1/home?page=1`).then(r => r.json()),
+                    fetch(`${API}/dramabox/api/foryou/1`).then(r => r.json())
+                ]);
+
+                let items = [];
+
+                // Process FlickReels
+                if (flick.status === 'fulfilled' && flick.value.data?.[0]?.list) {
+                    items.push(...flick.value.data[0].list.map(d => ({
+                        id: d.playlet_id,
+                        title: d.title,
+                        img: d.cover,
+                        source: 'flickreels',
+                        rating: d.score || 9.0
+                    })));
+                }
+
+                // Process RadReel
+                if (rad.status === 'fulfilled' && Array.isArray(rad.value)) {
+                    items.push(...rad.value.map(d => ({
+                        id: d.compilationsId,
+                        title: d.title,
+                        img: d.coverImgUrl,
+                        source: 'radreel',
+                        rating: d.score || 8.5
+                    })));
+                }
+
+                // Process DramaBox
+                if (box.status === 'fulfilled' && box.value.data?.list) {
+                    items.push(...box.value.data.list.map(d => ({
+                        id: d.bookId,
+                        title: d.bookName,
+                        img: d.cover,
+                        source: 'dramabox',
+                        rating: d.score || 8.8
+                    })));
+                }
+
+                if (items.length === 0) throw new Error("No items found");
+
+                allDramas = items.sort(() => 0.5 - Math.random()); // Shuffle
+                renderGrid(allDramas);
+
+            } catch (e) {
+                console.error("API Error", e);
+                toast("API Error - Using Backup Data");
+                allDramas = BACKUP_DATA;
+                renderGrid(allDramas);
+            }
+        }
+
+        function renderGrid(data) {
+            const grid = document.getElementById('mainGrid');
+            grid.innerHTML = data.map(d => `
+            <div class="card" onclick="openPlayer('${d.id}', '${d.source}', '${d.title.replace(/'/g, "\\'")}')">
+                <div class="poster ${!d.img ? 'no-img' : ''}" data-title="${d.title}">
+                    ${d.img ? `<img src="${d.img}" onerror="this.style.display='none';this.parentElement.classList.add('no-img')">` : ''}
                     <span class="badge">HOT</span>
+                    <span class="source-tag">${d.source}</span>
                 </div>
-                <h3>${d.title}</h3>
-                <div class="meta"><span>★ ${d.rating}</span><span>Drama</span></div>
-            </div>
-        `).join('') + DATA.map(d => `
-            <div class="card" onclick="play('${d.title}')">
-                <div class="poster">
-                    <img src="${getImg(d.title, d.color)}">
+                <div class="info">
+                    <h3>${d.title}</h3>
+                    <div class="meta">
+                        <span>★ ${d.rating}</span>
+                        <span>Drama</span>
+                    </div>
                 </div>
-                <h3>${d.title} (Ep. 2)</h3>
-                <div class="meta"><span>★ ${d.rating}</span><span>Drama</span></div>
             </div>
         `).join('');
         }
 
-        function play(t) {
-            document.getElementById('player').classList.add('active');
-            document.getElementById('pTitle').innerText = t;
-            const vid = document.querySelector('video');
-            vid.play();
+        function filterSource(src) {
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (src === 'all') renderGrid(allDramas);
+            else renderGrid(allDramas.filter(d => d.source === src));
         }
 
-        render('grid1');
-        render('grid2');
+        // Player Logic
+        async function openPlayer(id, source, title) {
+            const p = document.getElementById('player');
+            p.classList.add('active');
+            document.getElementById('pTitle').innerText = title;
+
+            // Generate episodes
+            const epList = document.getElementById('epList');
+            epList.innerHTML = Array(20).fill(0).map((_, i) =>
+                `<button class="ep-btn ${i === 0 ? 'active' : ''}" onclick="changeEp(this)">${i + 1}</button>`
+            ).join('');
+
+            // Play video (Mock reliable stream for validation)
+            const vid = document.getElementById('vid');
+            vid.src = "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
+            vid.play();
+
+            // Try to get real video (background)
+            try {
+                let url;
+                if (source === 'dramabox') url = `${API}/dramabox/api/watch/player?bookId=${id}&index=1`;
+                // Add other sources...
+
+                if (url) {
+                    fetch(url).then(r => r.json()).then(d => {
+                        if (d.data?.videoUrl) {
+                            vid.src = d.data.videoUrl;
+                            toast("Playing from source: " + source);
+                        }
+                    });
+                }
+            } catch (e) { }
+        }
+
+        function closePlayer() {
+            document.getElementById('player').classList.remove('active');
+            document.getElementById('vid').pause();
+        }
+
+        window.changeEp = (btn) => {
+            document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            toast("Playing Episode " + btn.innerText);
+        }
+
+        init();
     </script>
 
 </body>
