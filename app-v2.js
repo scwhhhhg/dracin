@@ -119,3 +119,10 @@ document.addEventListener('DOMContentLoaded', () => {
         utils.showToast('Source changed: ' + e.target.value);
     };
 });
+
+// FATAL FIX: Hide loading screen
+document.addEventListener('DOMContentLoaded', () => {
+    const loader = document.getElementById('loadingScreen');
+    if(loader) loader.style.display = 'none';
+});
+
